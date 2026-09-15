@@ -208,6 +208,8 @@ export function registerEphemeralVmRuntimeHandlers(store: Store): void {
         return null
       }
       if (runtime.status !== 'suspended' && runtime.status !== 'resume_failed') {
+        // A running VM can still have an unreachable transport. Report that failure to
+        // the activation UI so the user can retry; do not rerun the resume recipe.
         await restoreRuntimeOwnedSshTarget(userDataPath, runtime.id)
         return runtime
       }

@@ -129,10 +129,12 @@ export const createSshSlice: StateCreator<AppState, [], [], SshSlice> = (set) =>
         next.delete(targetId)
       }
       advanceLocalSshTargetConnectionGeneration(targetId)
+      const didReconnect = previous?.status !== 'connected' && state?.status === 'connected'
       return {
         runtimeOwnedSshConnectionStates: next,
-        sshConnectedGeneration:
-          state?.status === 'connected' ? s.sshConnectedGeneration + 1 : s.sshConnectedGeneration
+        sshConnectedGeneration: didReconnect
+          ? s.sshConnectedGeneration + 1
+          : s.sshConnectedGeneration
       }
     }),
 

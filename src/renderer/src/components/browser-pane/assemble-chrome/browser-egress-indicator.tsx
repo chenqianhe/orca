@@ -10,6 +10,7 @@ import {
   BROWSER_SSH_WORKSPACE_ROUTING_SETTINGS_TARGET_ID
 } from '@/lib/settings-navigation-types'
 import {
+  isRuntimeOwnedSshTargetId,
   toRuntimeExecutionHostId,
   toSshExecutionHostId
 } from '../../../../../shared/execution-host'
@@ -18,6 +19,7 @@ import {
   getExecutionHostIdForWorktree,
   getRuntimeEnvironmentIdForWorktree
 } from '@/lib/worktree-runtime-owner'
+import { resolveWorktreeDisplayName } from '@/lib/worktree-default-display-name'
 import { resolveSshWorkspaceBrowserRouteEligibility } from '@/lib/ssh-workspace-browser-route-eligibility'
 
 /**
@@ -113,6 +115,13 @@ export function SshEgressIndicator({
     settings,
     runtimeEnvironmentId
   )
+  const workspaceLabel = useAppStore((s) => {
+    if (!isRuntimeOwnedSshTargetId(routeEligibility?.targetId)) {
+      return null
+    }
+    const worktree = s.getKnownWorktreeById(worktreeId, executionHostId)
+    return worktree ? resolveWorktreeDisplayName(worktree) || null : null
+  })
   if (!routeEligibility) {
     return <Globe className="size-4 shrink-0 text-muted-foreground" />
   }
@@ -120,6 +129,7 @@ export function SshEgressIndicator({
   const hostLabel =
     getHostSettingOverride(settings, toSshExecutionHostId(targetId), 'displayLabel') ??
     sshTargetLabels.get(targetId) ??
+    workspaceLabel ??
     targetId
   return (
     <EgressIndicatorButton

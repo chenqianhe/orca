@@ -2,8 +2,12 @@ import { describe, expect, it } from 'vitest'
 import type { AppState } from '@/store/types'
 import { captureDirectSshMutationExpectation } from './ssh-mutation-expectation'
 
-function stateWithGenerations(): Pick<AppState, 'sshConnectionStates' | 'sshStateByEnvironment'> {
+function stateWithGenerations(): Pick<
+  AppState,
+  'sshConnectionStates' | 'sshStateByEnvironment' | 'runtimeOwnedSshConnectionStates'
+> {
   return {
+    runtimeOwnedSshConnectionStates: new Map(),
     sshConnectionStates: new Map([
       [
         'ssh-1',

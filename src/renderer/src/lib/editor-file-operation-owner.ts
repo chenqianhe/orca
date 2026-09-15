@@ -36,10 +36,10 @@ type EditorOwnerState = Pick<
   | 'runtimeEnvironments'
   | 'runtimeEnvironmentCatalogHydrated'
   | 'removedRuntimeEnvironmentIds'
+  | 'runtimeOwnedSshConnectionStates'
   | 'sshConnectionStates'
   | 'sshStateByEnvironment'
-> &
-  Partial<Pick<AppState, 'runtimeOwnedSshConnectionStates'>>
+>
 
 const OWNER_CHANGED_MESSAGE =
   "Couldn't verify which host owns this file. Reopen the file after the connection settles."
