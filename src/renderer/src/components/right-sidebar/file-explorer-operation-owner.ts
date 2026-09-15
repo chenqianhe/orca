@@ -201,6 +201,10 @@ export function captureFileExplorerOperationGuard(
   }
 }
 
+/**
+ * Read the connection generation from the route's owning runtime.
+ * Return undefined when SSH authority is unavailable so file operations fail closed.
+ */
 function getExpectedSshConnectionGeneration(
   state: SshOperationConnectionState,
   route: WorktreeOperationRoute

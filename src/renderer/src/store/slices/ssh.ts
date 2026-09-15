@@ -97,6 +97,10 @@ function advanceLocalSshTargetConnectionGeneration(targetId: string): void {
   targetConnectionGeneration.set(targetId, getLocalSshTargetConnectionGeneration(targetId) + 1)
 }
 
+/**
+ * Create SSH UI state and update actions.
+ * Keep recipe connection authority separate from public-host metadata and invalidate operation guards on changes.
+ */
 export const createSshSlice: StateCreator<AppState, [], [], SshSlice> = (set) => ({
   runtimeOwnedSshConnectionStates: new Map(),
   sshConnectionStates: new Map(),
@@ -111,6 +115,7 @@ export const createSshSlice: StateCreator<AppState, [], [], SshSlice> = (set) =>
   portForwardsByConnection: {},
   detectedPortsByConnection: {},
 
+  /** Update recipe authority and invalidate captured operations; null removes stale session state. */
   setRuntimeOwnedSshConnectionState: (targetId, state) =>
     set((s) => {
       const previous = s.runtimeOwnedSshConnectionStates.get(targetId)

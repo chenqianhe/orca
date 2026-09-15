@@ -56,6 +56,10 @@ export async function removeRuntimeOwnedSshTarget(targetId: string | undefined):
   await removeRegisteredSshTarget(targetId)
 }
 
+/**
+ * Wait for Git, filesystem, and PTY providers before exposing a usable VM connection.
+ * Reject on cancellation or timeout; transport connectivity alone is insufficient.
+ */
 export async function waitForRuntimeSshProviders(
   targetId: string,
   signal?: AbortSignal

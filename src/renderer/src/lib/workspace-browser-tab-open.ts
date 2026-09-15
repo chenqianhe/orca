@@ -79,6 +79,10 @@ export function canOpenWorkspaceBrowserTabOnRuntime(
   )
 }
 
+/**
+ * Check that browser creation still belongs to the requested desktop SSH target.
+ * Reject unavailable actions, paired-runtime routes, and routing opt-outs.
+ */
 function isExpectedSshBrowserRoute(
   state: AppState,
   availability: ClientCreationActionAvailability,

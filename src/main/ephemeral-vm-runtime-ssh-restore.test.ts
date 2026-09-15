@@ -37,6 +37,9 @@ beforeEach(() => {
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true })
 })
+/**
+ * Persist a running SSH runtime fixture, with overrides for lifecycle and ownership cases.
+ */
 function add(id: string, overrides: Partial<EphemeralVmRuntimeRecord> = {}): void {
   upsertEphemeralVmRuntime(dir, {
     id,

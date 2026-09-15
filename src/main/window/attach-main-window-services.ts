@@ -47,6 +47,10 @@ let activeAppReloadHandlerToken: number | null = null
 let tccPromptHandlerTokenCounter = 0
 let activeTccPromptHandlerToken: number | null = null
 
+/**
+ * Attach IPC, lifecycle, and permission services to the main window.
+ * Start VM transport restoration after SSH registration without blocking window setup.
+ */
 export function attachMainWindowServices(
   mainWindow: BrowserWindow,
   store: Store,

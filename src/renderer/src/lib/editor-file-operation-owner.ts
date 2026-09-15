@@ -205,6 +205,10 @@ export function getEditorFileOperationContext(
   }
 }
 
+/**
+ * Resolve the owning SSH session's generation for editor provenance checks.
+ * Missing authority remains undefined rather than borrowing another runtime's connection.
+ */
 function getExpectedSshConnectionGeneration(
   state: SshOperationConnectionState,
   route: WorktreeOperationRoute

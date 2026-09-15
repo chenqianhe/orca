@@ -42,6 +42,10 @@ export type EphemeralVmCleanupCommandResult = {
   message?: string
 }
 
+/**
+ * Register recipe runtime lifecycle IPC handlers.
+ * Activating a running SSH VM restores its transport; suspended VMs use the resume recipe.
+ */
 export function registerEphemeralVmRuntimeHandlers(store: Store): void {
   ipcMain.removeHandler('ephemeralVm:attachWorkspace')
   ipcMain.removeHandler('ephemeralVm:listRuntimes')

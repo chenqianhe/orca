@@ -30,6 +30,10 @@ export async function restoreRuntimeOwnedSshTarget(
   await waitForRuntimeSshProviders(target.id)
 }
 
+/**
+ * Reattach persisted running SSH VMs with at most four concurrent attempts.
+ * Failures are logged independently so an unavailable VM does not block the others.
+ */
 export async function restoreRunningRuntimeOwnedSshTargets(userDataPath: string): Promise<void> {
   const runtimes = listEphemeralVmRuntimes(userDataPath).filter(
     (runtime) =>

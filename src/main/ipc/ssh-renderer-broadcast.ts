@@ -24,6 +24,10 @@ import {
 
 export const relayStateOverrides = new Map<string, SshConnectionState>()
 
+/**
+ * Publish SSH state with the current provider authority to the desktop renderer.
+ * Recipe targets invalidate runtime scans but stay out of paired clients' public SSH catalogs.
+ */
 export function broadcastSshState(
   getMainWindow: () => BrowserWindow | null,
   targetId: string,

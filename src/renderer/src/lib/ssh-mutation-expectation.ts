@@ -18,6 +18,10 @@ export type DirectSshMutationExpectation = {
   expectedSshConnectionGeneration: number
 }
 
+/**
+ * Capture the target and connection generation required to authorize an SSH mutation.
+ * Throw if the owning runtime has no verifiable connection generation.
+ */
 export function captureDirectSshMutationExpectation(
   state: DirectSshMutationState,
   connectionId: string,
@@ -38,6 +42,10 @@ export function captureDirectSshMutationExpectation(
   }
 }
 
+/**
+ * Resolve a workspace route and capture its SSH mutation authority when applicable.
+ * Local and runtime-host routes use local execution within their owning process; unknown owners fail closed.
+ */
 export function captureWorktreeSshMutationExpectation(
   state: AppState,
   worktreeId: string

@@ -36,6 +36,10 @@ export function setAgentBrowserBridgeRef(bridge: AgentBrowserBridge | null): voi
   agentBrowserBridgeRef = bridge
 }
 
+/**
+ * Register browser IPC operations and guest/session management.
+ * SSH route preparation requires a trusted renderer and a registered target, including recipe VMs.
+ */
 export function registerBrowserHandlers(): void {
   resetGrabModeState()
   ipcMain.removeHandler('browser:registerGuest')
