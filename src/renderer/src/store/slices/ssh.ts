@@ -32,6 +32,8 @@ export type SshCredentialRequest = {
 }
 
 export type SshSlice = {
+  runtimeOwnedSshConnectionStates: Map<string, SshConnectionState>
+  setRuntimeOwnedSshConnectionState: (targetId: string, state: SshConnectionState | null) => void
   sshConnectionStates: Map<string, SshConnectionState>
   /** Maps target IDs to their user-facing labels. Populated during hydration
    * so components can look up labels without per-component IPC calls. */
@@ -96,6 +98,7 @@ function advanceLocalSshTargetConnectionGeneration(targetId: string): void {
 }
 
 export const createSshSlice: StateCreator<AppState, [], [], SshSlice> = (set) => ({
+  runtimeOwnedSshConnectionStates: new Map(),
   sshConnectionStates: new Map(),
   sshTargetLabels: new Map(),
   sshTargetGenerations: new Map(),
@@ -107,6 +110,26 @@ export const createSshSlice: StateCreator<AppState, [], [], SshSlice> = (set) =>
   sshConnectedGeneration: 0,
   portForwardsByConnection: {},
   detectedPortsByConnection: {},
+
+  setRuntimeOwnedSshConnectionState: (targetId, state) =>
+    set((s) => {
+      const previous = s.runtimeOwnedSshConnectionStates.get(targetId)
+      if (state ? sshConnectionStatesEqual(previous, state) : !previous) {
+        return s
+      }
+      const next = new Map(s.runtimeOwnedSshConnectionStates)
+      if (state) {
+        next.set(targetId, state)
+      } else {
+        next.delete(targetId)
+      }
+      advanceLocalSshTargetConnectionGeneration(targetId)
+      return {
+        runtimeOwnedSshConnectionStates: next,
+        sshConnectedGeneration:
+          state?.status === 'connected' ? s.sshConnectedGeneration + 1 : s.sshConnectedGeneration
+      }
+    }),
 
   setSshConnectionState: (targetId, state) =>
     set((s) => {

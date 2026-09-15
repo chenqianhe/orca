@@ -1,3 +1,4 @@
+import { restoreRuntimeOwnedSshTarget } from '../ephemeral-vm-runtime-ssh-restore'
 import { app, ipcMain } from 'electron'
 import type { Store } from '../persistence'
 import {
@@ -203,6 +204,7 @@ export function registerEphemeralVmRuntimeHandlers(store: Store): void {
         return null
       }
       if (runtime.status !== 'suspended' && runtime.status !== 'resume_failed') {
+        await restoreRuntimeOwnedSshTarget(userDataPath, runtime.id)
         return runtime
       }
       const recipeContext = getRuntimeRecipeContext(store, userDataPath, runtime.id)

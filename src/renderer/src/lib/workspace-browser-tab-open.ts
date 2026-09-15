@@ -92,7 +92,8 @@ function isExpectedSshBrowserRoute(
   const expectedTargetId = expectedSshConnectionId.trim()
   const eligibility = resolveSshWorkspaceBrowserRouteEligibility(
     getExecutionHostIdForWorktree(state, workspaceId),
-    state.settings
+    state.settings,
+    route.runtimeEnvironmentId
   )
   const host = parseExecutionHostId(route.executionHostId)
   return (

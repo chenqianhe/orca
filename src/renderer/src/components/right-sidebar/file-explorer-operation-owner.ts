@@ -1,3 +1,7 @@
+import {
+  getSshOperationConnectionState,
+  type SshOperationConnectionState
+} from '@/lib/ssh-operation-connection-state'
 import { getConnectionIdFromState } from '@/lib/connection-context'
 import { useAppStore } from '@/store'
 import type { AppState } from '@/store/types'
@@ -198,18 +202,15 @@ export function captureFileExplorerOperationGuard(
 }
 
 function getExpectedSshConnectionGeneration(
-  state: Pick<AppState, 'sshConnectionStates' | 'sshStateByEnvironment'>,
+  state: SshOperationConnectionState,
   route: WorktreeOperationRoute
 ): number | undefined {
   const host = parseExecutionHostId(route.executionHostId)
   if (host?.kind !== 'ssh') {
     return undefined
   }
-  return route.runtimeEnvironmentId
-    ? state.sshStateByEnvironment
-        .get(route.runtimeEnvironmentId)
-        ?.connectionStates.get(host.targetId)?.connectionGeneration
-    : state.sshConnectionStates.get(host.targetId)?.connectionGeneration
+  return getSshOperationConnectionState(state, host.targetId, route.runtimeEnvironmentId)
+    ?.connectionGeneration
 }
 
 function getFileExplorerGenerationRoute(
